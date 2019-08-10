@@ -1,0 +1,10 @@
+banana 12
+aparke 100
+apple 15
+orange 8
+peach 7
+cherry 20
+grape 15
+grape 15
+pear 4
+aparke

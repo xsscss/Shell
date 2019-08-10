@@ -1,0 +1,40 @@
+1.只是显示/etc/passwd的账户
+cut -f1 -d':' passwd 
+awk -F':' '{print$1}' passwd
+
+2.显示/etc/passwd的账户和账户对应的shell,而账户与shell之间以逗号分割,
+而且在所有行开始前添加列名name,shell,在最后一行添加"blue,/bin/nosh"
+awk -F':' 'BEGIN {print "name,shell"}{print $1","$7}END{print "blue,/bin/nobaash"}' passwd 
+
+3.搜索/etc/passwd有root关键字的所有行
+awk  '/root/ { print $0}'   passwd
+
+4.统计/etc/passwd文件中，每行的行号，每行的列数，对应的完整行内容
+
+awk -F ':' '{print NR"\t" NF"\t" $0}' passwd 
+awk -F ':' '{print "filename:" FILENAME ",linenumber:" NR ",columns:" NF ",linecontent:"$0}' passwd 
+
+5.统计报表：合计每人1月工资，0：manager，1：worker
+Tom	 0   2012-12-11      car     3000
+John	 1   2013-01-13      bike    1000
+vivi	 1   2013-01-18      car     2800
+Tom	 0   2013-01-20      car     2500
+John	 1   2013-01-28      bike    3500
+
+结果
+vivi	worker	2800
+Tom	manager	2500
+John	worker	4500
+思路：
+实现
+需求分析
+1.统计一月的首先观察数据 表中的数据不是直接拿来用的 首先用awk的内置函数split()处理 分离出月份
+2.判断如果月份等于一月，定义一个name数组 将第一列的值作为数组的下标 ，值为第五列的当月收入额，并且根据判断条件为一月，进行累加
+3.再次判断如果第二列的值如果等于1为manager如果是 0为worker
+4.打印结果 使用for(i in name){ }
+awk  '{split($3,data,"-");if(data[2]=="01"){name[$1]+=$5};if($2=="0"){role[$1]="manager"}else{role[$1]="worker"}}END{for(i in name){print i "\t" role[i] "\t" name[i]}}' awk.txt 
+
+
+
+
+

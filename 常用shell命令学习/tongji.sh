@@ -1,0 +1,1 @@
+awk '{sum+=NF} {print sum }' tongji.txt | tail -1
